@@ -1,0 +1,101 @@
+<form  th:action="@{/api/classgroup/v1/edit/{id} (id=${classgroup.classGroupId})}"
+
+	   th:object = "${classgroup}" method="POST" id="ubahClassGroup"><!--	ID FORM TIDAK BOLEH SAMA DENGAN ID MODALS DI FRAGMENT -->
+	<input type="hidden" value="d55dc0a2601f6ebc3755b2a79ae06319" /><!-- form generate id security of front end -->
+	<!--	   th:object = "${divisi}" method="POST" id="ubahDivisi">&lt;!&ndash;	ID FORM TIDAK BOLEH SAMA DENGAN ID MODALS DI FRAGMENT &ndash;&gt;-->
+	<div th:if="${#fields.hasErrors('global')}" class="error-box error-danger" >
+		<p th:each="err : ${#fields.errors('global')}" th:text="${err}"  class="error"/>
+	</div>
+	<div class ="form-group">
+		<label> Grade </label>
+		<input
+				type = "text"
+				name = "grade"
+				th:field = "*{grade}"
+				class = "form-control"
+				placeholder="Masukkan Grade"
+		/>
+		<ul>
+			<li th:each="err : ${#fields.errors('grade')}" th:text="${err}" class="error" />
+<!--			<li th:if="${#fields.hasErrors('namaDivisi')}" th:errors="*{namaDivisi}" />-->
+		</ul>
+	</div>
+
+	<div class ="form-group">
+		<label> Kode Class Group </label>
+		<input
+				type = "text"
+				name = "classGroupCode"
+				th:field = "*{classGroupCode}"
+				class = "form-control"
+				placeholder="Masukkan Kode Class Group"
+		/>
+		<ul>
+			<li th:each="err : ${#fields.errors('classGroupCode')}" th:text="${err}" class="error" />
+<!--			<li th:if="${#fields.hasErrors('kodeDivisi')}" th:errors="*{kodeDivisi}" />-->
+		</ul>
+	</div>
+
+	<div class ="form-group">
+		<label> Deskripsi </label>
+		<input
+				type = "text"
+				name = "description"
+				th:field = "*{description}"
+				class = "form-control"
+				placeholder="Masukkan Deskripsi"
+		/>
+		<ul>
+			<li th:each="err : ${#fields.errors('description')}" th:text="${err}" class="error" />
+			<!--			<li th:if="${#fields.hasErrors('kodeDivisi')}" th:errors="*{kodeDivisi}" />-->
+		</ul>
+	</div>
+
+	<div class = "modal-footer">
+		<button type="submit" class = "btn btn-primary">
+			Submit
+		</button>
+		<button type="button" class="btn btn-secondary" data-dismiss="modal">
+			Close
+		</button>
+	</div>
+
+</form>
+
+<script th:inline="javascript">
+/*<![CDATA[*/
+    $("#ubahClassGroup").submit(function(event) {
+          event.preventDefault(); //prevent default action
+          let post_url = $(this).attr("action"); //get form action url
+          let request_method = $(this).attr("method"); //get form GET/POST method
+          let form_data = $(this).serialize(); //Encode form elements for submission
+          $.ajax({
+              url: post_url,
+              type: request_method,
+              data: form_data
+            }).done(function(response) {
+            let pattern = /d55dc0a2601f6ebc3755b2a79ae06319/i;
+			let result = response.match(pattern);
+            if(result)
+            {
+            	try
+            	{
+					$("#server-results-edit").html(response);
+            	}
+            	catch(r)
+            	{
+					console.log('aman')
+            	}
+            }
+            else
+            {
+				$('#editClassGroup').modal('hide');
+				confirm("DATA BERHASIL DIUBAH");
+				location.reload();
+            }
+
+            });
+        });
+
+/*]]>*/
+</script>

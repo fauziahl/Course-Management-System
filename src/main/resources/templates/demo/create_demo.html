@@ -1,0 +1,65 @@
+<form th:action="@{/api/usrmgmnt/v1/demo/new}"
+	  th:object = "${demo}" method="POST" id="buatDemo" enctype="multipart/form-data"><!--	ID FORM TIDAK BOLEH SAMA DENGAN ID MODALS DI FRAGMENT -->
+	<input type="hidden" value="e97e7c60095d4cd505cce7a56c376dba" /><!-- form generate id security of front end -->
+	<div class ="form-group">
+		<label> Nama Menu </label>
+		<input
+				type = "text"
+				name = "namaDemo"
+				id = "namaDemo"
+				class = "form-control"
+				placeholder="Masukkan Kata"
+		/>
+	</div>
+
+	<div class ="form-group">
+		<label> Image </label>
+		<input id="foto" name="foto" type="file" accept="image/*" />
+	</div>
+
+	<div class = "modal-footer">
+		<button type="submit" class = "btn btn-primary">
+			Submit
+		</button>
+		<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+	</div>
+</form>
+
+<script th:inline="javascript">
+/*<![CDATA[*/
+
+    $("#buatDemo").submit(function(event) {
+    	  let varHue = even.target.name;
+          event.preventDefault(); //prevent default action
+          let post_url = $(this).attr("action"); //get form action url
+          let request_method = $(this).attr("method"); //get form GET/POST method
+          let form_data = $(this).serialize(); //Encode form elements for submission
+          $.ajax({
+              url: post_url+'?demoName='+varHue,
+              type: request_method,
+              enctype: 'multipart/form-data',
+              data: form_data,
+              processData: false, //prevent jQuery from automatically transforming the data into a query string
+			  contentType: false,
+			  cache: false,
+			  timeout: 600000,
+			  body: JSON.stringify()
+            }).done(function(response) { //
+            let pattern = /e97e7c60095d4cd505cce7a56c376dba/i;
+			let result = response.match(pattern);
+            if(result)
+            {
+				$("#server-results").html(response);
+            }
+            else
+            {
+				$('#addDemo').modal('hide');
+				confirm("DATA BERHASIL DISIMPAN");
+				location.reload();
+            }
+
+            });
+        });
+
+/*]]>*/
+</script>

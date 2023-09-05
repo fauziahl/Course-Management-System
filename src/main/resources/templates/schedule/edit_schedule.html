@@ -1,0 +1,160 @@
+<form  th:action="@{/api/schedule/v1/edit/{id} (id=${schedule.scheduleId})}"
+
+	   th:object = "${schedule}" method="POST" id="ubahSchedule"><!--	ID FORM TIDAK BOLEH SAMA DENGAN ID MODALS DI FRAGMENT -->
+	<input type="hidden" value="cc0600d59e0f68c69b92a6209e780147" /><!-- form generate id security of front end -->
+	<!--	   th:object = "${divisi}" method="POST" id="ubahDivisi">&lt;!&ndash;	ID FORM TIDAK BOLEH SAMA DENGAN ID MODALS DI FRAGMENT &ndash;&gt;-->
+	<div th:if="${#fields.hasErrors('global')}" class="error-box error-danger" >
+		<p th:each="err : ${#fields.errors('global')}" th:text="${err}"  class="error"/>
+	</div>
+	<div class ="form-group">
+		<label> Session Date </label>
+		<input
+				type = "date"
+				name = "sessionDate"
+				th:field = "*{sessionDate}"
+				class = "form-control"
+				placeholder="Masukkan Tanggal"
+		/>
+		<ul>
+			<li th:each="err : ${#fields.errors('sessionDate')}" th:text="${err}" class="error" />
+<!--			<li th:if="${#fields.hasErrors('namaDivisi')}" th:errors="*{namaDivisi}" />-->
+		</ul>
+	</div>
+
+	<div class ="form-group">
+		<label> Start Time </label>
+		<input
+				type = "time"
+				name = "startTime"
+				th:field = "*{startTime}"
+				class = "form-control"
+				placeholder="Pilih Start Time"
+		/>
+		<ul>
+			<li th:each="err : ${#fields.errors('startTime')}" th:text="${err}" class="error" />
+<!--			<li th:if="${#fields.hasErrors('kodeDivisi')}" th:errors="*{kodeDivisi}" />-->
+		</ul>
+	</div>
+
+	<div class ="form-group">
+		<label> End Time </label>
+		<input
+				type = "time"
+				name = "endTime"
+				th:field = "*{endTime}"
+				class = "form-control"
+				placeholder="Pilih End Time"
+		/>
+		<ul>
+			<li th:each="err : ${#fields.errors('endTime')}" th:text="${err}" class="error" />
+			<!--			<li th:if="${#fields.hasErrors('kodeDivisi')}" th:errors="*{kodeDivisi}" />-->
+		</ul>
+	</div>
+
+	<div class ="form-group">
+		<label> Class Group </label>
+		<select th:field="*{classGroup.classGroupId}" class="form-control" name="list-classGroup" th:object="${schedule}" id="list-classGroup" >
+			<option value="" selected="selected" disabled hidden="hidden">---pilih class group---</option>
+			<option th:each="classGroup: ${listClassGroup}" th:value="${classGroup.classGroupId}" th:text="${classGroup.classGroupCode}"></option>
+		</select>
+		<ul>
+			<li th:each="err : ${#fields.errors('classGroup')}" th:text="${err}" class="error" />
+		</ul>
+	</div>
+
+	<div class ="form-group">
+		<label> Subject </label>
+		<select th:field="*{subject.subjectId}" class="form-control" name="list-subject" th:object="${schedule}" id="list-subject" >
+			<option value="" selected="selected" disabled hidden="hidden">---pilih subject---</option>
+			<option th:each="subject: ${listSubject}" th:value="${subject.subjectId}" th:text="${subject.subject}"></option>
+		</select>
+		<ul>
+			<li th:each="err : ${#fields.errors('subject')}" th:text="${err}" class="error" />
+		</ul>
+	</div>
+
+	<div class ="form-group">
+		<label> Teacher </label>
+		<select th:field="*{teacher.teacherId}" class="form-control" name="list-teacher" th:object="${schedule}" id="list-teacher" >
+			<option value="" selected="selected" disabled hidden="hidden">---pilih teacher---</option>
+			<option th:each="teacher: ${listTeacher}" th:value="${teacher.teacherId}" th:text="${teacher.name}"></option>
+		</select>
+		<ul>
+			<li th:each="err : ${#fields.errors('teacher')}" th:text="${err}" class="error" />
+		</ul>
+	</div>
+
+	<div class ="form-group">
+		<label> Classroom </label>
+		<select th:field="*{classroom.classroomId}" class="form-control" name="list-classroom" th:object="${schedule}" id="list-classroom" >
+			<option value="" selected="selected" disabled hidden="hidden">---pilih classroom---</option>
+			<option th:each="classroom: ${listClassroom}" th:value="${classroom.classroomId}" th:text="${classroom.classroom}"></option>
+		</select>
+		<ul>
+			<li th:each="err : ${#fields.errors('classroom')}" th:text="${err}" class="error" />
+		</ul>
+	</div>
+
+	<div class ="form-group">
+		<label> Status </label>
+		<input
+				type = "text"
+				name = "status"
+				th:field = "*{status}"
+				class = "form-control"
+				placeholder="Masukkan Status"
+		/>
+		<ul>
+			<li th:each="err : ${#fields.errors('status')}" th:text="${err}" class="error" />
+			<!--			<li th:if="${#fields.hasErrors('kodeDivisi')}" th:errors="*{kodeDivisi}" />-->
+		</ul>
+	</div>
+
+	<div class = "modal-footer">
+		<button type="submit" class = "btn btn-primary">
+			Submit
+		</button>
+		<button type="button" class="btn btn-secondary" data-dismiss="modal">
+			Close
+		</button>
+	</div>
+
+</form>
+
+<script th:inline="javascript">
+/*<![CDATA[*/
+    $("#ubahSchedule").submit(function(event) {
+          event.preventDefault(); //prevent default action
+          let post_url = $(this).attr("action"); //get form action url
+          let request_method = $(this).attr("method"); //get form GET/POST method
+          let form_data = $(this).serialize(); //Encode form elements for submission
+          $.ajax({
+              url: post_url,
+              type: request_method,
+              data: form_data
+            }).done(function(response) {
+            let pattern = /cc0600d59e0f68c69b92a6209e780147/i;
+			let result = response.match(pattern);
+            if(result)
+            {
+            	try
+            	{
+					$("#server-results-edit").html(response);
+            	}
+            	catch(r)
+            	{
+					console.log('aman')
+            	}
+            }
+            else
+            {
+				$('#editSchedule').modal('hide');
+				confirm("DATA BERHASIL DIUBAH");
+				location.reload();
+            }
+
+            });
+        });
+
+/*]]>*/
+</script>

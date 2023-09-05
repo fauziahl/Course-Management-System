@@ -1,0 +1,72 @@
+<form  th:action="@{/api/subject/v1/edit/{id} (id=${subject.subjectId})}"
+
+	   th:object = "${subject}" method="POST" id="ubahSubject"><!--	ID FORM TIDAK BOLEH SAMA DENGAN ID MODALS DI FRAGMENT -->
+	<input type="hidden" value="e34a6659b2ab6b346c005a09ab18cc6a" /><!-- form generate id security of front end -->
+	<!--	   th:object = "${divisi}" method="POST" id="ubahDivisi">&lt;!&ndash;	ID FORM TIDAK BOLEH SAMA DENGAN ID MODALS DI FRAGMENT &ndash;&gt;-->
+	<div th:if="${#fields.hasErrors('global')}" class="error-box error-danger" >
+		<p th:each="err : ${#fields.errors('global')}" th:text="${err}"  class="error"/>
+	</div>
+
+	<div class ="form-group">
+		<label> Subject </label>
+		<input
+				type = "text"
+				name = "subject"
+				th:field = "*{subject}"
+				class = "form-control"
+				placeholder="Masukkan Subject"
+		/>
+		<ul>
+			<li th:each="err : ${#fields.errors('subject')}" th:text="${err}" class="error" />
+<!--			<li th:if="${#fields.hasErrors('kodeDivisi')}" th:errors="*{kodeDivisi}" />-->
+		</ul>
+	</div>
+
+	<div class = "modal-footer">
+		<button type="submit" class = "btn btn-primary">
+			Submit
+		</button>
+		<button type="button" class="btn btn-secondary" data-dismiss="modal">
+			Close
+		</button>
+	</div>
+
+</form>
+
+<script th:inline="javascript">
+/*<![CDATA[*/
+    $("#ubahSubject").submit(function(event) {
+          event.preventDefault(); //prevent default action
+          let post_url = $(this).attr("action"); //get form action url
+          let request_method = $(this).attr("method"); //get form GET/POST method
+          let form_data = $(this).serialize(); //Encode form elements for submission
+          $.ajax({
+              url: post_url,
+              type: request_method,
+              data: form_data
+            }).done(function(response) {
+            let pattern = /e34a6659b2ab6b346c005a09ab18cc6a/i;
+			let result = response.match(pattern);
+            if(result)
+            {
+            	try
+            	{
+					$("#server-results-edit").html(response);
+            	}
+            	catch(r)
+            	{
+					console.log('aman')
+            	}
+            }
+            else
+            {
+				$('#editSubject').modal('hide');
+				confirm("DATA BERHASIL DIUBAH");
+				location.reload();
+            }
+
+            });
+        });
+
+/*]]>*/
+</script>

@@ -1,0 +1,151 @@
+<form th:action="@{/api/schedule/v1/new}" th:object = "${schedule}"
+	  method="POST" id="buatSchedule"><!--	ID FORM TIDAK BOLEH SAMA DENGAN ID MODALS DI FRAGMENT -->
+	<input type="hidden" value="b8cf93ff78b2953ed2375097107a0acf" /><!-- form generate id security of front end -->
+
+	<div th:if="${#fields.hasErrors('global')}" class="error-box error-danger" >
+		<p th:each="err : ${#fields.errors('global')}" th:text="${err}"  class="error"/>
+	</div>
+	<div class ="form-group">
+		<label> Session Date </label>
+		<input
+				type = "date"
+				name = "sessionDate"
+				th:field = "*{sessionDate}"
+				class = "form-control"
+		/>
+		<ul>
+			<li th:each="err : ${#fields.errors('sessionDate')}" th:text="${err}" class="error" />
+		</ul>
+	</div>
+
+	<div class ="form-group">
+		<label> Start Time </label>
+		<input
+				type = "time"
+				name = "endTime"
+				min = "13:00"
+				max = "19:00"
+				th:field = "*{startTime}"
+				class = "form-control"
+				placeholder="Pilih Start Time"
+		/>
+		<ul>
+			<li th:each="err : ${#fields.errors('startTime')}" th:text="${err}" class="error" />
+		</ul>
+	</div>
+
+	<div class ="form-group">
+		<label> End Time </label>
+		<input
+				type = "time"
+				name = "endTime"
+				min = "14:30"
+				max = "20:30"
+				th:field = "*{endTime}"
+				class = "form-control"
+				placeholder="Pilih End Time"
+		/>
+		<ul>
+			<li th:each="err : ${#fields.errors('endTime')}" th:text="${err}" class="error" />
+		</ul>
+	</div>
+
+	<div class ="form-group">
+		<label> Class Group </label>
+		<select th:field="*{classGroup.classGroupId}" class="form-control" name="classGroup" th:object="${schedule}" id="classGroup">
+			<option value="" selected="selected" disabled hidden="hidden">---select class group---</option>
+			<option th:each="classGroup: ${listClassGroup}" th:value="${classGroup.classGroupId}" th:text="${classGroup.classGroupCode}"></option>
+		</select>
+		<ul>
+			<li th:each="err : ${#fields.errors('classGroup')}" th:text="${err}" class="error" />
+		</ul>
+	</div>
+
+	<div class ="form-group">
+		<label> Subject </label>
+		<select th:field="*{subject.subjectId}" class="form-control" name="subject" th:object="${schedule}" id="subject">
+			<option value="" selected="selected" disabled hidden="hidden">---select subject---</option>
+			<option th:each="subject: ${listSubject}" th:value="${subject.subjectId}" th:text="${subject.subject}"></option>
+		</select>
+		<ul>
+			<li th:each="err : ${#fields.errors('subject')}" th:text="${err}" class="error" />
+		</ul>
+	</div>
+
+	<div class ="form-group">
+		<label> Teacher </label>
+		<select th:field="*{teacher.teacherId}" class="form-control" name="teacher" th:object="${schedule}" id="teacher">
+			<option value="" selected="selected" disabled hidden="hidden">---select teacher---</option>
+			<option th:each="teacher: ${listTeacher}" th:value="${teacher.teacherId}" th:text="${teacher.name}"></option>
+		</select>
+		<ul>
+			<li th:each="err : ${#fields.errors('teacher')}" th:text="${err}" class="error" />
+		</ul>
+	</div>
+
+	<div class ="form-group">
+		<label> Classroom </label>
+		<select th:field="*{classroom.classroomId}" class="form-control" name="classroom" th:object="${schedule}" id="classroom">
+			<option value="" selected="selected" disabled hidden="hidden">---select classroom---</option>
+			<option th:each="classroom: ${listClassroom}" th:value="${classroom.classroomId}" th:text="${classroom.classroom}"></option>
+		</select>
+		<ul>
+			<li th:each="err : ${#fields.errors('classroom')}" th:text="${err}" class="error" />
+		</ul>
+	</div>
+
+<!--	<div class ="form-group">-->
+<!--		<label> Status </label>-->
+<!--		<input-->
+<!--				type = "text"-->
+<!--				name = "status"-->
+<!--				th:field = "*{status}"-->
+<!--				class = "form-control"-->
+<!--				placeholder="Masukkan Status"-->
+<!--		/>-->
+<!--		<ul>-->
+<!--			<li th:each="err : ${#fields.errors('status')}" th:text="${err}" class="error" />-->
+<!--		</ul>-->
+<!--	</div>-->
+
+	<div class = "modal-footer">
+		<button type="submit" class = "btn btn-primary">
+			Submit
+		</button>
+		<button type="button" class="btn btn-secondary" data-dismiss="modal">
+			Close
+		</button>
+	</div>
+</form>
+
+<script th:inline="javascript">
+/*<![CDATA[*/
+
+    $("#buatSchedule").submit(function(event) {
+          event.preventDefault(); //prevent default action
+          let post_url = $(this).attr("action"); //get form action url
+          let request_method = $(this).attr("method"); //get form GET/POST method
+          let form_data = $(this).serialize(); //Encode form elements for submission
+          $.ajax({
+              url: post_url,
+              type: request_method,
+              data: form_data
+            }).done(function(response) { //
+            let pattern = /b8cf93ff78b2953ed2375097107a0acf/i;
+			let result = response.match(pattern);
+            if(result)
+            {
+				$("#server-results").html(response);
+            }
+            else
+            {
+				$('#addSchedule').modal('hide');
+				confirm("DATA BERHASIL DISIMPAN");
+				location.reload();
+            }
+
+            });
+        });
+
+/*]]>*/
+</script>

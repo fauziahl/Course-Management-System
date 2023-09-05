@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="ISO-8859-1"/>
+  <meta />
+  <style>
+table {
+    border-collapse: collapse;
+  }
+  table, th, td {
+    border: 1px solid black;
+
+  }
+  th, td {
+    padding: 15px;
+  }
+
+  th {
+    background: green;
+  }
+</style>
+  <title>AKSES TEMPLATE</title>
+</head>
+<body>
+<div class="container">
+  <div class="row">
+    <div class="col-md-2">
+      <img th:src="@{classpath:static/images/Google-Noto-Emoji-Travel-Places-42598-rocket.512.png}" width="100px" alt="Google-Noto-Emoji-Travel-Places-42598-rocket.512" />
+    </div>
+    <div class="col-md-8">
+      <h3 style="text-align:center">JUDUL NYA DISINI</h3>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <th:block th:if="${#lists.size(content) != 0}"/>
+      <table border="1" class = "table table-striped table-responsive-md">
+        <thead class="table-dark">
+        <tr>
+          <th style="text-align: center">NO</th>
+          <th style="text-align: center">ID</th>
+          <th style="text-align: center">AKSES</th>
+          <th style="text-align: center">Divisi</th>
+          <th style="text-align: center">Kode Divisi</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="childEntity,idx : ${content}">
+          <td th:text="${idx.index+1}"></td>
+          <td th:text="${childEntity.idAkses}"></td>
+          <td th:text="${childEntity.namaAkses}"></td>
+          <td style="text-align: center" th:text="${childEntity.divisi==null}?'':${childEntity.divisi?.namaDivisi}"></td>
+          <td style="text-align: center" th:text="${childEntity.divisi==null}?'':${childEntity.divisi?.kodeDivisi}"></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

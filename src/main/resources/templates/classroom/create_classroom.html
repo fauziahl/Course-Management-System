@@ -1,0 +1,63 @@
+<form th:action="@{/api/classroom/v1/new}" th:object = "${classroom}"
+	  method="POST" id="buatClassroom"><!--	ID FORM TIDAK BOLEH SAMA DENGAN ID MODALS DI FRAGMENT -->
+	<input type="hidden" value="0de284bef869e454748ceb1d7b0e86a8" /><!-- form generate id security of front end -->
+
+	<div th:if="${#fields.hasErrors('global')}" class="error-box error-danger" >
+		<p th:each="err : ${#fields.errors('global')}" th:text="${err}"  class="error"/>
+	</div>
+
+	<div class ="form-group">
+		<label> Classroom </label>
+		<input
+				type = "text"
+				name = "classroom"
+				th:field = "*{classroom}"
+				class = "form-control"
+				placeholder="Masukkan Kode Classroom"
+		/>
+		<ul>
+			<li th:each="err : ${#fields.errors('classroom')}" th:text="${err}" class="error" />
+		</ul>
+	</div>
+
+	<div class = "modal-footer">
+		<button type="submit" class = "btn btn-primary">
+			Submit
+		</button>
+		<button type="button" class="btn btn-secondary" data-dismiss="modal">
+			Close
+		</button>
+	</div>
+</form>
+
+<script th:inline="javascript">
+/*<![CDATA[*/
+
+    $("#buatClassroom").submit(function(event) {
+          event.preventDefault(); //prevent default action
+          let post_url = $(this).attr("action"); //get form action url
+          let request_method = $(this).attr("method"); //get form GET/POST method
+          let form_data = $(this).serialize(); //Encode form elements for submission
+          $.ajax({
+              url: post_url,
+              type: request_method,
+              data: form_data
+            }).done(function(response) { //
+            let pattern = /0de284bef869e454748ceb1d7b0e86a8/i;
+			let result = response.match(pattern);
+            if(result)
+            {
+				$("#server-results").html(response);
+            }
+            else
+            {
+				$('#addClassroom').modal('hide');
+				confirm("DATA BERHASIL DISIMPAN");
+				location.reload();
+            }
+
+            });
+        });
+
+/*]]>*/
+</script>

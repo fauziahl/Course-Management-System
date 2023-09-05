@@ -1,0 +1,88 @@
+<form th:action="@{/api/teacher/v1/new}" th:object = "${teacher}"
+      method="POST" id="buatTeacher">
+  <input type="hidden" value="2ac0ac7032dd4bc899184f7934bfa561" /><!-- form generate id security of front end -->
+  <div th:if="${#fields.hasErrors('global')}" class="error-box error-danger" >
+    <p th:each="err : ${#fields.errors('global')}" th:text="${err}"  class="error"/>
+  </div>
+  <div class ="form-group">
+    <label> Teacher Name </label>
+    <input
+            type = "text"
+            name = "name"
+            th:field = "*{name}"
+            class = "form-control"
+            placeholder="Enter Name"
+    />
+    <ul>
+      <li th:each="err : ${#fields.errors('name')}" th:text="${err}" class="error" />
+    </ul>
+  </div>
+
+  <div class ="form-group">
+    <label> Phone Number </label>
+    <input
+            type = "text"
+            name = "phoneNumber"
+            th:field = "*{phoneNumber}"
+            class = "form-control"
+            placeholder="Enter Phone Number"
+    />
+    <ul>
+      <li th:each="err : ${#fields.errors('phoneNumber')}" th:text="${err}" class="error" />
+    </ul>
+  </div>
+
+  <div class ="form-group">
+    <label> Email </label>
+    <input
+            type = "text"
+            name = "email"
+            th:field = "*{email}"
+            class = "form-control"
+            placeholder="Enter Email"
+    />
+    <ul>
+      <li th:each="err : ${#fields.errors('email')}" th:text="${err}" class="error" />
+    </ul>
+  </div>
+
+  <div class = "modal-footer">
+    <button type="submit" class = "btn btn-primary">
+      Submit
+    </button>
+    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+      Close
+    </button>
+  </div>
+</form>
+
+<script th:inline="javascript">
+/*<![CDATA[*/
+
+    $("#buatTeacher").submit(function(event) {
+          event.preventDefault(); //prevent default action
+          let post_url = $(this).attr("action"); //get form action url
+          let request_method = $(this).attr("method"); //get form GET/POST method
+          let form_data = $(this).serialize(); //Encode form elements for submission
+          $.ajax({
+              url: post_url,
+              type: request_method,
+              data: form_data
+            }).done(function(response) { //
+            let pattern = /2ac0ac7032dd4bc899184f7934bfa561/i;
+			let result = response.match(pattern);
+            if(result)
+            {
+				$("#server-results").html(response);
+            }
+            else
+            {
+				$('#addTeacher').modal('hide');
+				confirm("DATA BERHASIL DISIMPAN");
+				location.reload();
+            }
+
+            });
+        });
+/*]]>*/
+</script>

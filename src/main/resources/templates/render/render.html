@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"/>
+	<link th:href="@{/styles/style.css}" rel="stylesheet" />
+	<link th:href="@{/styles/navbar.css}" rel="stylesheet" />
+	<link th:href="@{/styles/banner.css}" rel="stylesheet" />
+	<link th:href="@{/styles/error.css}" rel="stylesheet" />
+	<script th:src="@{/js/modalz.js}"></script>
+	<script th:src="@{/js/action.js}"></script>
+
+	<title>RENDER</title>
+</head>
+<body>
+
+<form th:action="@{/api/usrmgmnt/v1/akses/new}" th:object = "${akses}" method="POST" id="buatAkses"><!--	ID FORM TIDAK BOLEH SAMA DENGAN ID MODALS DI FRAGMENT -->
+	<input type="hidden" value="01f73a018521072a3942d08ae4eac020" /><!-- form generate id security of front end -->
+
+	<div th:if="${#fields.hasErrors('global')}" class="error-box error-danger" >
+		<p th:each="err : ${#fields.errors('global')}" th:text="${err}"  class="error"/>
+	</div>
+
+	<div class ="form-group">
+		<label> Nama Akses </label>
+		<input
+				type = "text"
+				name = "namaAkses"
+				th:field = "*{namaAkses}"
+				class = "form-control"
+				placeholder="Masukkan Nama Akses"
+		/>
+		<ul>
+			<li th:each="err : ${#fields.errors('namaAkses')}" th:text="${err}" class="error" />
+		</ul>
+	</div>
+
+	<div class ="form-group">
+		<label> Divisi </label>
+		<select th:field="*{divisi.idDivisi}" class="form-control" name="divisi" th:object="${akses}" id="divisi">
+			<option value="" selected="selected" disabled hidden="hidden">---pilih divisi---</option>
+			<option th:each="divisi: ${listDivisi}" th:value="${divisi.idDivisi}" th:text="${divisi.namaDivisi}"></option>
+		</select>
+		<ul>
+			<li th:each="err : ${#fields.errors('divisi')}" th:text="${err}" class="error" />
+		</ul>
+	</div>
+
+	<div class ="form-group">
+		<label> Menu List </label>
+		<select id="listMenuAkses" name="listMenuAkses"  th:field="*{listMenuAkses}" size="10" multiple="multiple">
+			<option value="" selected="selected" disabled hidden="hidden">---pilih menu---</option>
+			<option th:each="menuList: ${listMenu}" th:value="${menuList.idMenu}" th:text="${menuList.namaMenu}"></option>
+		</select>
+	</div>
+
+	<div class = "modal-footer">
+		<button type="submit" class = "btn btn-primary">
+			Submit
+		</button>
+		<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+	</div>
+
+</form>
+
+</body>
+</html>

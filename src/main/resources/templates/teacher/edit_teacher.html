@@ -1,0 +1,128 @@
+<form  th:action="@{/api/teacher/v1/edit/{id} (id=${teacher.teacherId})}"
+	   th:object = "${teacher}" method="POST" id="ubahTeacher">
+	<input type="hidden" value="be8e982919c3c0914f31d2401ae30922" /><!-- form generate id security of front end -->
+	<div th:if="${#fields.hasErrors('global')}" class="error-box error-danger" >
+		<p th:each="err : ${#fields.errors('global')}" th:text="${err}"  class="error"/>
+	</div>
+	<div class ="form-group">
+		<label> Teacher Name </label>
+		<input
+				type = "text"
+				name = "name"
+				id = "name"
+				th:field = "*{name}"
+				class = "form-control"
+				placeholder="Enter Teacher Name"
+		/>
+		<ul>
+			<li th:each="err : ${#fields.errors('name')}" th:text="${err}" class="error" />
+		</ul>
+	</div>
+
+	<div class ="form-group">
+		<label> Phone Number </label>
+		<input
+				type = "text"
+				name = "phoneNumber"
+				id = "phoneNumber"
+				th:field = "*{phoneNumber}"
+				class = "form-control"
+				placeholder="Enter Phone Number"
+		/>
+		<ul>
+			<li th:each="err : ${#fields.errors('phoneNumber')}" th:text="${err}" class="error" />
+		</ul>
+	</div>
+
+	<div class ="form-group">
+		<label> Student Email </label>
+		<input
+				type = "text"
+				name = "email"
+				id = "email"
+				th:field = "*{email}"
+				class = "form-control"
+				placeholder="Enter Student Email"
+		/>
+		<ul>
+			<li th:each="err : ${#fields.errors('email')}" th:text="${err}" class="error" />
+		</ul>
+	</div>
+
+	<h3>Subject List</h3>
+	<div class="grid-container">
+		<div class="grid-item" th:each="subjectList: ${subjectList}">
+			<input type="checkbox"
+				   th:value="${subjectList.subjectId}"
+				   th:name="subjectTeacherList"
+				   id="subjectTeacherList"
+				   th:checked="${subjectSelected.contains(subjectList.subjectId)}"
+			>
+			<label th:text="${subjectList.subject}"/>
+		</div>
+	</div>
+
+	<div>
+		<input type="button" class="my_form-check-button" onClick="checkAll(true,'subjectTeacherList');" value="Check All" />
+		<input type="button" class="my_form-check-button" onClick="checkAll(false,'subjectTeacherList');" value="Clear All" />
+	</div>
+
+	<div class = "modal-footer">
+		<button type="submit" class = "btn btn-primary">
+			Submit
+		</button>
+		<button type="button" class="btn btn-secondary" data-dismiss="modal">
+			Close
+		</button>
+	</div>
+</form>
+
+<script th:inline="javascript">
+/*<![CDATA[*/
+
+function checkAll(checkEm,divNames) {
+    var cbs = document.getElementsByTagName('input');
+    for (var i = 0; i < cbs.length; i++) {
+        if (cbs[i].type == 'checkbox') {
+            if (cbs[i].name == divNames) {
+                cbs[i].checked = checkEm;
+            }
+        }
+    }
+}
+
+    $("#ubahTeacher").submit(function(event) {
+          event.preventDefault(); //prevent default action
+          let post_url = $(this).attr("action"); //get form action url
+          let request_method = $(this).attr("method"); //get form GET/POST method
+          let form_data = $(this).serialize(); //Encode form elements for submission
+          $.ajax({
+              url: post_url,
+              type: request_method,
+              data: form_data
+            }).done(function(response) { //
+            let pattern = /be8e982919c3c0914f31d2401ae30922/i;
+			let result = response.match(pattern);
+            if(result)
+            {
+				try
+            	{
+					$("#server-results-edit").html(response);
+            	}
+            	catch(r)
+            	{
+					console.log('aman')
+            	}
+            }
+            else
+            {
+				$('#teacherEdit').modal('hide');
+				confirm("DATA BERHASIL DIUBAH");
+				location.reload();
+            }
+
+            });
+        });
+
+/*]]>*/
+</script>

@@ -1,0 +1,121 @@
+<form th:action="@{/api/school/v1/new}" th:object = "${student}" method="POST" id="buatStudent">
+	<input type="hidden" value="6f4b9eb9f3b8b1516485f94ba8ef413e" /><!-- form generate id security of front end -->
+	<div th:if="${#fields.hasErrors('global')}" class="error-box error-danger" >
+		<p th:each="err : ${#fields.errors('global')}" th:text="${err}"  class="error"/>
+	</div>
+	<div class ="form-group">
+		<label> Student Name </label>
+		<input
+				type = "text"
+				name = "name"
+				th:field = "*{name}"
+				class = "form-control"
+				placeholder="Enter Name"
+		/>
+		<ul>
+			<li th:each="err : ${#fields.errors('name')}" th:text="${err}" class="error" />
+		</ul>
+	</div>
+
+	<div class ="form-group">
+		<label> Grade </label>
+		<input
+				type = "number"
+				name = "grade"
+				th:field = "*{grade}"
+				class = "form-control"
+				placeholder="Enter Grade"
+		/>
+		<ul>
+			<li th:each="err : ${#fields.errors('grade')}" th:text="${err}" class="error" />
+		</ul>
+	</div>
+
+	<div class ="form-group">
+		<label> School Name </label>
+		<input
+				type = "text"
+				name = "schoolName"
+				th:field = "*{schoolName}"
+				class = "form-control"
+				placeholder="Enter School Name"
+		/>
+		<ul>
+			<li th:each="err : ${#fields.errors('schoolName')}" th:text="${err}" class="error" />
+		</ul>
+	</div>
+
+	<div class ="form-group">
+		<label> Phone Number </label>
+		<input
+				type = "text"
+				name = "phoneNumber"
+				th:field = "*{phoneNumber}"
+				class = "form-control"
+				placeholder="Enter Phone Number"
+		/>
+		<ul>
+			<li th:each="err : ${#fields.errors('phoneNumber')}" th:text="${err}" class="error" />
+		</ul>
+	</div>
+
+	<div class ="form-group">
+		<label> Email </label>
+		<input
+				type = "text"
+				name = "email"
+				th:field = "*{email}"
+				class = "form-control"
+				placeholder="Enter Email"
+		/>
+		<ul>
+			<li th:each="err : ${#fields.errors('email')}" th:text="${err}" class="error" />
+		</ul>
+	</div>
+
+	<div class ="form-group">
+		<label> Class Group </label>
+		<select form="buatStudent" th:field="*{classGroup.classGroupId}" class="form-control" name="groupClass"id="groupClass">
+			<option th:each="classGroup: ${listClassGroup}" th:value="${classGroup.classGroupId}" th:text="${classGroup.classGroupCode}"></option>
+		</select>
+	</div>
+
+	<div class = "modal-footer">
+		<button type="submit" class = "btn btn-primary">
+			Submit
+		</button>
+		<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+	</div>
+</form>
+
+<script th:inline="javascript">
+/*<![CDATA[*/
+
+    $("#buatStudent").submit(function(event) {
+          event.preventDefault(); //prevent default action
+          let post_url = $(this).attr("action"); //get form action url
+          let request_method = $(this).attr("method"); //get form GET/POST method
+          let form_data = $(this).serialize(); //Encode form elements for submission
+          $.ajax({
+              url: post_url,
+              type: request_method,
+              data: form_data
+            }).done(function(response) { //
+            let pattern = /6f4b9eb9f3b8b1516485f94ba8ef413e/i;
+			let result = response.match(pattern);
+            if(result)
+            {
+				$("#server-results").html(response);
+            }
+            else
+            {
+				$('#addStudent').modal('hide');
+				confirm("DATA BERHASIL DISIMPAN");
+				location.reload();
+            }
+
+            });
+        });
+
+/*]]>*/
+</script>

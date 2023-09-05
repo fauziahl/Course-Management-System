@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Buat OM YAN</title>
+</head>
+<body>
+
+<form th:action="@{/api/usrmgmnt/v1/demo/new}"
+      th:object = "${demo}" method="POST" id="buatDemo"><!--	ID FORM TIDAK BOLEH SAMA DENGAN ID MODALS DI FRAGMENT -->
+  <div class ="form-group">
+    <label> Nama Menu </label>
+    <input
+            type = "text"
+            name = "namaDemo"
+            id = "namaDemo"
+            th:field = "*{namaDemo}"
+            class = "form-control"
+            placeholder="Masukkan Nama Demo"
+    />
+  </div>
+  <div class ="form-group">
+    <label> Nama Menu </label>
+    <input
+            type = "text"
+            name = "deskripsiDemo"
+            id = "deskripsiDemo"
+            th:field = "*{deskripsiDemo}"
+            class = "form-control"
+            placeholder="Masukkan Deskripsi Demo"
+    />
+  </div>
+
+  <div class = "modal-footer">
+    <button type="submit" class = "btn btn-primary">
+      Submit
+    </button>
+    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+  </div>
+</form>
+
+</body>
+</html>
